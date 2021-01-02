@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"path/filepath"
 
 	"git.martianoids.com/queru/retroserver/internal/banner"
+	"git.martianoids.com/queru/retroserver/internal/build"
 	"git.martianoids.com/queru/retroserver/internal/cfg"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
@@ -40,6 +42,7 @@ func main() {
 	} else {
 		log.Println("SERVER/ENV", "Production mode ON")
 	}
+	log.Println(build.Version())
 
 	// root path
 	cfg.Main.Root = filepath.Dir(".")
@@ -69,6 +72,16 @@ func main() {
 	// Routes
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString(banner.Title)
+	})
+
+	app.Get("/server/version", func(c *fiber.Ctx) error {
+		return c.SendString(fmt.Sprintf(
+			"+ SERVER VERSION:\n\n- %s\n- %s\n- %s\n- %s\n",
+			build.Version(),
+			build.VersionShort(),
+			build.BinVersion(),
+			build.CompileTime(),
+		))
 	})
 
 	// recover from panic
