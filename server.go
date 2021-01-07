@@ -1,13 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"path/filepath"
 
-	"git.martianoids.com/queru/retroserver/internal/banner"
 	"git.martianoids.com/queru/retroserver/internal/build"
 	"git.martianoids.com/queru/retroserver/internal/cfg"
+	"git.martianoids.com/queru/retroserver/internal/controller"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -70,27 +69,10 @@ func main() {
 	app.Use(cors.New())
 
 	// Routes
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString(banner.Title)
-	})
-
-	app.Get("/server/version", func(c *fiber.Ctx) error {
-		return c.SendString(fmt.Sprintf(
-			"+ SERVER VERSION:\n\n- %s\n- %s\n- %s\n- %s\n",
-			build.Version(),
-			build.VersionShort(),
-			build.BinVersion(),
-			build.CompileTime(),
-		))
-	})
+	controller.Setup(app)
 
 	// recover from panic
 	app.Use(recover.New())
-
-	// 404 Not found
-	app.Get("*", func(c *fiber.Ctx) error {
-		return c.Status(fiber.StatusNotFound).SendString(banner.Error404)
-	})
 
 	// server UP
 	app.Listen(*cfg.Main.Server.IP + ":" + *cfg.Main.Server.Port)

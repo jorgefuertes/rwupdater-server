@@ -19,3 +19,5 @@ bin/
 dist/
 tmp/
 .build
+files/
+.DS_Store
