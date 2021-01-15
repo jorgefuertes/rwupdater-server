@@ -21,3 +21,5 @@ tmp/
 .build
 files/
 .DS_Store
+/work
+
