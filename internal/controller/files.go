@@ -26,13 +26,13 @@ type File struct {
 func recurse(arch string, path string, curRec int) ([]File, error) {
 	var list []File
 	var r = regexp.MustCompile(`\A([A-Za-z0-9\-]+)\_([0-9a-z]+)\.rbf\z`)
-	var prefix = "./files/" + arch + "/"
+	var prefix = "./files/" + arch
 
 	if curRec > MaxRecursion {
 		return list, errors.New("max recursion limit reached")
 	}
 
-	dir, err := ioutil.ReadDir(prefix + path)
+	dir, err := ioutil.ReadDir(prefix + "/" + path)
 	if err != nil {
 		return list, err
 	}
@@ -54,7 +54,7 @@ func recurse(arch string, path string, curRec int) ([]File, error) {
 		}
 
 		file := File{
-			Path:      strings.TrimPrefix(path, prefix),
+			Path:      strings.TrimPrefix(path, "/"),
 			Name:      entry.Name(),
 			Timestamp: entry.ModTime().Unix(),
 		}
