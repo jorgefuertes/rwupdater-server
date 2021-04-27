@@ -30,8 +30,8 @@ func main() {
 		Short('r').Default("10s").Duration()
 	cfg.Main.Server.WTimeout = kingpin.Flag("write-timeout", "Write timeout").
 		Short('w').Default("10s").Duration()
-	cfg.Main.Server.Concurrency = kingpin.Flag("concurrency", "Maximum number of concurrent connections in MiB").
-		Default("256").Int()
+	cfg.Main.Server.Concurrency = kingpin.Flag("concurrency",
+		"Maximum number of concurrent connections in MiB").Default("256").Int()
 
 	kingpin.UsageTemplate(kingpin.CompactUsageTemplate).Version(cfg.Version).Author(cfg.Author)
 	kingpin.CommandLine.Help = "Web Application Server"

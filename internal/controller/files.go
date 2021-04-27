@@ -23,15 +23,16 @@ type File struct {
 	Timestamp int64  `json:"ts"`
 }
 
-func recurse(path string, curRec int) ([]File, error) {
+func recurse(arch string, path string, curRec int) ([]File, error) {
 	var list []File
 	var r = regexp.MustCompile(`\A([A-Za-z0-9\-]+)\_([0-9a-z]+)\.rbf\z`)
+	var prefix = "./files/" + arch + "/"
 
 	if curRec > MaxRecursion {
 		return list, errors.New("max recursion limit reached")
 	}
 
-	dir, err := ioutil.ReadDir(path)
+	dir, err := ioutil.ReadDir(prefix + path)
 	if err != nil {
 		return list, err
 	}
@@ -42,7 +43,7 @@ func recurse(path string, curRec int) ([]File, error) {
 		}
 
 		if entry.IsDir() {
-			subdir, err := recurse(path+"/"+entry.Name(), curRec+1)
+			subdir, err := recurse(arch, path+"/"+entry.Name(), curRec+1)
 			if err != nil {
 				return list, err
 			}
@@ -53,7 +54,7 @@ func recurse(path string, curRec int) ([]File, error) {
 		}
 
 		file := File{
-			Path:      strings.TrimPrefix(path, "./files"),
+			Path:      strings.TrimPrefix(path, prefix),
 			Name:      entry.Name(),
 			Timestamp: entry.ModTime().Unix(),
 		}
@@ -77,7 +78,7 @@ func files(app *fiber.App) {
 
 	// file list
 	f.Get("/catalog/:arch", func(c *fiber.Ctx) error {
-		dir, err := recurse("./files/"+c.Params("arch"), 0)
+		dir, err := recurse(c.Params("arch"), "", 0)
 		if err != nil {
 			return err
 		}
@@ -86,8 +87,8 @@ func files(app *fiber.App) {
 	})
 
 	// file download
-	f.Get("/download/:id", func(c *fiber.Ctx) error {
-		dir, err := recurse("./files", 0)
+	f.Get("/download/:arch/:id", func(c *fiber.Ctx) error {
+		dir, err := recurse(c.Params("arch"), "", 0)
 		if err != nil {
 			return err
 		}
@@ -105,28 +106,5 @@ func files(app *fiber.App) {
 
 		c.Set("Content-Disposition", "inline; filename=\""+file.Name+"\"")
 		return c.SendFile(file.Path+"/"+file.Name, true)
-	})
-
-	// core
-	f.Get("/core/:name/:version", func(c *fiber.Ctx) error {
-		dir, err := ioutil.ReadDir("./files/cores")
-		if err != nil {
-			return err
-		}
-
-		r := regexp.MustCompile(`\A(` + c.Params("name") + `)\_([0-9a-z]+)\.rbf\z`)
-		for _, file := range dir {
-			if r.MatchString(file.Name()) {
-				fdata := r.FindSubmatch([]byte(file.Name()))
-				if string(fdata[2]) == c.Params("version") {
-					return c.SendStatus(fiber.StatusNotModified)
-				}
-
-				c.Set("Content-Disposition", "inline; filename=\""+file.Name()+"\"")
-				return c.SendFile("./files/cores/"+file.Name(), true)
-			}
-		}
-
-		return fiber.ErrNotFound
 	})
 }
