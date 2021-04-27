@@ -4,6 +4,7 @@ import (
 	"log"
 	"path/filepath"
 
+	"git.martianoids.com/queru/retroserver/internal/banner"
 	"git.martianoids.com/queru/retroserver/internal/build"
 	"git.martianoids.com/queru/retroserver/internal/cfg"
 	"git.martianoids.com/queru/retroserver/internal/controller"
@@ -36,24 +37,35 @@ func main() {
 	kingpin.CommandLine.Help = "Web Application Server"
 	kingpin.Parse()
 
-	if *cfg.Main.Env == "dev" {
-		log.Println("SERVER/ENV", "Development mode ON")
-	} else {
-		log.Println("SERVER/ENV", "Production mode ON")
-	}
-	log.Println(build.Version())
-
 	// root path
 	cfg.Main.Root = filepath.Dir(".")
 
 	// app and configuration
 	app := fiber.New(
 		fiber.Config{
-			ReadTimeout:  *cfg.Main.Server.RTimeout,
-			WriteTimeout: *cfg.Main.Server.WTimeout,
-			BodyLimit:    *cfg.Main.Server.BodyLimitMb * 1024 * 1024,
-			Concurrency:  *cfg.Main.Server.Concurrency * 1024,
-			ServerHeader: "RetroServer_" + cfg.Version,
+			ReadTimeout:           *cfg.Main.Server.RTimeout,
+			WriteTimeout:          *cfg.Main.Server.WTimeout,
+			BodyLimit:             *cfg.Main.Server.BodyLimitMb * 1024 * 1024,
+			Concurrency:           *cfg.Main.Server.Concurrency * 1024,
+			ServerHeader:          "RetroServer_" + cfg.Version,
+			DisableStartupMessage: true,
+			ErrorHandler: func(ctx *fiber.Ctx, err error) error {
+				code := fiber.StatusInternalServerError
+				txt := banner.Error500
+				if e, ok := err.(*fiber.Error); ok {
+					code = e.Code
+				}
+				if code == 404 {
+					txt = banner.Error404
+				}
+				err = ctx.Status(code).SendString(
+					banner.Title + "\n" + txt + banner.Separator + err.Error() + banner.Separator)
+				if err != nil {
+					return ctx.Status(500).SendString("Internal Server Error")
+				}
+
+				return nil
+			},
 		},
 	)
 
@@ -68,11 +80,21 @@ func main() {
 	// cors
 	app.Use(cors.New())
 
-	// Routes
+	// routes
 	controller.Setup(app)
 
 	// recover from panic
 	app.Use(recover.New())
+
+	// startup banner and info
+	log.Println(banner.Console)
+	if *cfg.Main.Env == "dev" {
+		log.Println("SERVER/ENV", "Development mode ON")
+	} else {
+		log.Println("SERVER/ENV", "Production mode ON")
+	}
+	log.Println(build.Version())
+	log.Println("Listening in", *cfg.Main.Server.IP+":"+*cfg.Main.Server.Port)
 
 	// server UP
 	app.Listen(*cfg.Main.Server.IP + ":" + *cfg.Main.Server.Port)

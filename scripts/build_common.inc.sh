@@ -1,17 +1,17 @@
 EXE_NAME="retroserver"
 
-git status | grep "On branch master" &> /dev/null
+git status | egrep "On branch master|En la rama master" &> /dev/null
 if [[ $? -ne 0 ]]
 then
 	echo "Refusing to build from other branch than master"
 	exit 1
 fi
 
-git status | grep "working tree clean" &> /dev/null
+git status | egrep "working tree clean|el árbol de trabajo está limpio" &> /dev/null
 if [[ $? -ne 0 ]]
 then
 	echo "Commit local changes and create a new tag first"
-	exit 1
+	#exit 1
 fi
 
 git describe --tags --contains &> /dev/null
@@ -30,10 +30,12 @@ echo "Version: ${VER}"
 
 WHO=$(whoami)
 TIME=$(date +"%d-%m-%Y@%H:%M:%S")
-# darwin, linux
-OS_LIST=(darwin linux)
+# darwin, linux, windows
 # amd64, arm, arm64...
-ARCH_LIST=(amd64 arm arm64)
+BUILD_LIST=(
+	"darwin/amd64"
+	"linux/amd64"
+)
 
 if [[ -f .build ]]
 then

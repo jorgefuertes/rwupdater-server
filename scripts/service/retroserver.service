@@ -1,0 +1,15 @@
+[Unit]
+Description=Retro File Server
+After=network.target auditd.service
+
+[Service]
+Type=simple
+ExecStart=/home/retroserver/retroserver -e prod -i 127.0.0.1 -p 3000
+Restart=always
+User=retroserver
+WorkingDirectory=/home/retroserver
+WorkingDirectoryMode=0755
+
+[Install]
+WantedBy=multi-user.target
+Alias=retroserver.service

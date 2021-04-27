@@ -7,6 +7,6 @@ import (
 
 func index(app *fiber.App) {
 	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString(banner.Title)
+		return c.SendString(banner.Console)
 	})
 }
