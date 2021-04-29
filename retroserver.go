@@ -71,7 +71,7 @@ func main() {
 
 	// compression
 	if *cfg.Main.Env == "prod" {
-		app.Use(compress.New())
+		app.Use(compress.New(compress.Config{Level: 0}))
 	}
 
 	// logger

@@ -23,9 +23,11 @@ type File struct {
 	Timestamp int64  `json:"ts"`
 }
 
+// aux function to transverse dirs
 func recurse(arch string, path string, curRec int) ([]File, error) {
 	var list []File
-	var r = regexp.MustCompile(`\A([A-Za-z0-9\-]+)\_([0-9a-z]+)\.rbf\z`)
+	var r = regexp.MustCompile(`\A([A-Za-z0-9\-]+)\_([0-9a-zA-Z\-\_]+)\.rbf\z`)
+	var fbr = regexp.MustCompile(`.*\.fiber\...\z`)
 	var prefix = "./files/" + arch
 
 	if curRec > MaxRecursion {
@@ -38,7 +40,7 @@ func recurse(arch string, path string, curRec int) ([]File, error) {
 	}
 
 	for _, entry := range dir {
-		if strings.HasPrefix(entry.Name(), ".") {
+		if strings.HasPrefix(entry.Name(), ".") || fbr.MatchString(entry.Name()) {
 			continue
 		}
 
@@ -73,6 +75,7 @@ func recurse(arch string, path string, curRec int) ([]File, error) {
 	return list, nil
 }
 
+// controller
 func files(app *fiber.App) {
 	f := app.Group("/files")
 
@@ -105,6 +108,6 @@ func files(app *fiber.App) {
 		}
 
 		c.Set("Content-Disposition", "inline; filename=\""+file.Name+"\"")
-		return c.SendFile(file.Path+"/"+file.Name, true)
+		return c.SendFile("./files/"+c.Params("arch")+"/"+file.Path+"/"+file.Name, true)
 	})
 }
