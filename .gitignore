@@ -22,4 +22,4 @@ tmp/
 files/
 .DS_Store
 /work
-
+node_modules

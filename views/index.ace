@@ -1,0 +1,9 @@
+ul
+  li
+    a href="/doc/about" &raquo; About
+  li
+    a href="/download" &raquo; Download
+  li
+    a href="/contact" &raquo; Contact
+  li
+    a href="/doc/links" &raquo; Links

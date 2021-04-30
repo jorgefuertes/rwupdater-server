@@ -1,0 +1,5 @@
+h4.underlined The updater software
+
+p
+  | The RetroWiki's updater software is a server/client architecture intended to be a uniform way
+  |  to update the most usual FPGA based retromachines.

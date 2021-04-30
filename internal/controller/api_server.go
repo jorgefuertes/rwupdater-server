@@ -9,9 +9,9 @@ import (
 )
 
 func apiServer(app *fiber.App) {
-	a := app.Group("/api/server")
+	g := app.Group("/api/server")
 
-	a.Get("/version", func(c *fiber.Ctx) error {
+	g.Get("/version", func(c *fiber.Ctx) error {
 		return c.SendString(fmt.Sprintf(
 			"+ SERVER VERSION:\n\n- %s\n- %s\n- %s\n- %s\n",
 			build.Version(),

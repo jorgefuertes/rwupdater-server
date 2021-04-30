@@ -1,7 +1,10 @@
 package main
 
 import (
+	"embed"
+	"io/fs"
 	"log"
+	"net/http"
 	"path/filepath"
 
 	"git.martianoids.com/queru/retroserver/internal/banner"
@@ -11,10 +14,15 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/gofiber/template/ace"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
+
+//go:embed asset
+var asset embed.FS
 
 func main() {
 	// command line flags and params
@@ -40,6 +48,9 @@ func main() {
 	// root path
 	cfg.Main.Root = filepath.Dir(".")
 
+	// template engine
+	engine := ace.New("./views", ".ace")
+
 	// app and configuration
 	app := fiber.New(
 		fiber.Config{
@@ -49,6 +60,7 @@ func main() {
 			Concurrency:           *cfg.Main.Server.Concurrency * 1024,
 			ServerHeader:          "RetroServer_" + cfg.Version,
 			DisableStartupMessage: true,
+			Views:                 engine,
 			ErrorHandler: func(ctx *fiber.Ctx, err error) error {
 				code := fiber.StatusInternalServerError
 				txt := banner.Error500
@@ -82,6 +94,17 @@ func main() {
 
 	// routes
 	controller.Setup(app)
+
+	// static assets
+	if cfg.IsDev() {
+		app.Static("/asset", "asset")
+	} else {
+		subFS, _ := fs.Sub(asset, "asset")
+		app.Use("/asset", filesystem.New(filesystem.Config{
+			Root:         http.FS(subFS),
+			NotFoundFile: "Static file not found",
+		}))
+	}
 
 	// recover from panic
 	app.Use(recover.New())
