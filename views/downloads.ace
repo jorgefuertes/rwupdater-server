@@ -1,0 +1,7 @@
+h3 Latest version is {{.Latest}}:
+
+ul
+  {{range .Dls}}
+    li
+      a href="/download/dist/{{.File}}" &raquo; {{.Os}}/{{.CPU}}:  {{.Size}} {{.Ext}}
+  {{end}}

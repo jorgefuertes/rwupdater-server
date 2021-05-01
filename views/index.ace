@@ -2,7 +2,9 @@ ul
   li
     a href="/doc/about" &raquo; About
   li
-    a href="/download" &raquo; Download
+    a href="/downloads" &raquo; Downloads
+  li
+    a href="/doc/contribute" &raquo; Contribute
   li
     a href="/contact" &raquo; Contact
   li

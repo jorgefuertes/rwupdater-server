@@ -6,6 +6,7 @@ import "github.com/gofiber/fiber/v2"
 func Setup(app *fiber.App) {
 	index(app)
 	doc(app)
+	download(app)
 	apiServer(app)
 	apiArch(app)
 	apiFiles(app)

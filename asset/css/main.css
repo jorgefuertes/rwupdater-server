@@ -1,5 +1,5 @@
 html {
-  background-color: rgb(0, 16, 7);
+  background-color: #001007;
 }
 
 body {
@@ -88,16 +88,17 @@ a:hover {
   background-color: #00d696;
   text-decoration: none; }
 
-a.button.is-terminal {
+a.is-terminal {
   background-color: transparent;
-  color: #00D696;
-  border-color: #00D696;
+  color: #00d696b6;
+  font-size: 1.4rem;
   font-weight: 600;
+  padding: 0 .4rem;
 }
 
-a.button.is-terminal:hover {
+a.is-terminal:hover {
   color: #0f2920;
-  background-color: #00d696;
+  background-color: #00d696b6;
 }
 
 .cursor-block {
