@@ -10,4 +10,10 @@ func doc(app *fiber.App) {
 			"PageTitle": "About",
 		}, "layouts/main")
 	})
+
+	g.Get("/contribute", func(c *fiber.Ctx) error {
+		return c.Render("doc/contrib", fiber.Map{
+			"PageTitle": "Contribute",
+		}, "layouts/main")
+	})
 }

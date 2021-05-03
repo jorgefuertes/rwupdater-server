@@ -14,13 +14,20 @@ html
   body
     section.section
       .container.rw-header
-        pre
-          |
-             ______         __               ________ __ __     __
-            |   __ \.-----.|  |_.----.-----.|  |  |  |__|  |--.|__|
-            |      <|  -__||   _|   _|  _  ||  |  |  |  |    < |  |
-            |___|__||_____||____|__| |_____||________|__|__|__||__|
-        h4 RetroWiki FPGA-Team Updater
+        a href="/"
+          pre.is-hidden-mobile
+            |
+               ______         __               ________ __ __     __
+              |   __ \.-----.|  |_.----.-----.|  |  |  |__|  |--.|__|
+              |      <|  -__||   _|   _|  _  ||  |  |  |  |    < |  |
+              |___|__||_____||____|__| |_____||________|__|__|__||__|
+          pre.is-hidden-tablet
+            |
+               ______   ________
+              |   __ \.|  |  |  |
+              |      <||  |  |  |
+              |___|__|||________|
+          h4 RetroWiki FPGA-Team Updater
       .container.menu
         h2.menu-title *** {{.PageTitle}} ***
         .menu-body {{embed}}
