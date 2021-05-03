@@ -27,6 +27,9 @@ import (
 //go:embed asset
 var asset embed.FS
 
+//go:embed views
+var views embed.FS
+
 func main() {
 	// command line flags and params
 	cfg.Main.Env = kingpin.Flag("environment", "dev or prod mode").
@@ -52,7 +55,13 @@ func main() {
 	cfg.Main.Root = filepath.Dir(".")
 
 	// template engine
-	engine := ace.New("./views", ".ace")
+	var engine *ace.Engine
+	if cfg.IsDev() {
+		engine = ace.New("./views", ".ace")
+	} else {
+		tFS, _ := fs.Sub(views, "views")
+		engine = ace.NewFileSystem(http.FS(tFS), ".ace")
+	}
 
 	// app and configuration
 	app := fiber.New(
