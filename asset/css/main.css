@@ -3,7 +3,6 @@ html {
 }
 
 body {
-  padding: 0 2rem;
   color: #00b280;
   font-family: 'VT323', 'Menlo', 'Monaco', monospace;
   font-size: 1.5rem;
@@ -16,6 +15,16 @@ p {
 
 .rw-header {
   margin-bottom: 2rem;
+}
+
+.rw-header > a {
+  padding: 0;
+  color: #00b280;
+}
+
+.rw-header > a:hover {
+  color: #00D696;
+  background-color: transparent;
 }
 
 pre {
@@ -116,3 +125,56 @@ a.is-terminal:hover {
     visibility: hidden; }
   100% {
     visibility: visible; } }
+
+.terminal-control {
+  margin-bottom: 1rem;
+}
+
+.terminal-control > label {
+  display: block;
+  font-size: 1.5rem;
+}
+
+.terminal-control > input, .terminal-control > textarea {
+  width: 100%;
+  background-color: #0d241c;
+  border: none;
+  font-size: 1.6rem;
+  color: #00D696;
+  padding: .3rem .2rem;
+  font-family: 'VT323', 'Menlo', 'Monaco', monospace;
+  box-shadow: none;
+}
+
+.terminal-control > input:focus, .terminal-control > textarea:focus,
+.terminal-control > input:focus-visible, .terminal-control > textarea:focus-visible,
+.terminal-control > input.is-focused, .terminal-control > textarea.is-focused,
+.terminal-control > input:active, .terminal-control > textarea:active,
+.terminal-control > input.is-active, .terminal-control > textarea.is-active
+{
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  outline: 0;
+}
+
+button, input[type="submit"] {
+  font-family: 'VT323', 'Menlo', 'Monaco', monospace;
+  font-size: 1.6rem;
+  font-weight: 800;
+  background-color: transparent;
+  color: #00D696;
+  border: 2px solid #00D696;
+  padding: .25rem .8rem;
+  min-width: 8rem;
+}
+
+button:hover, input[type="submit"]:hover {
+  background-color: #00D696;
+  color: #0f2920;
+}
+
+.buttons {
+  display: block;
+  padding: 1rem 0 1.5rem 0;
+}

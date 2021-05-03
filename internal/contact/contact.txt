@@ -1,0 +1,14 @@
+From: {{.From}}
+To: {{.To}}
+Reply-To: {{.ReplyTo}}
+Subject: RW-Updater Contact form
+
+Username: {{.Name}}
+EMail: {{.ReplyTo}}
+Lang: {{.Lang}}
+IP: {{.IP}}
+Agent: {{.Agent}}
+
+{{.Subject}}
+
+{{.Message}}
