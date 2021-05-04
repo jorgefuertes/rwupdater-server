@@ -1,14 +1,14 @@
 package controller
 
 import (
+	"git.martianoids.com/queru/retroserver/internal/helper"
 	"github.com/gofiber/fiber/v2"
 )
 
-func index(app *fiber.App) {
+func indexCtrl(app *fiber.App) {
 	app.Get("/", func(c *fiber.Ctx) error {
-		return c.Render("index", fiber.Map{
-			"PageTitle": "Main Menu",
-			"MainMenu":  true,
-		}, "layouts/main")
+		h := helper.New(c)
+		h.SetPageTitle("menu.main.title")
+		return h.Render("index")
 	})
 }

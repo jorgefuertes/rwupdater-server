@@ -1,0 +1,47 @@
+doctype html
+html(lang="en")
+	head
+		title RW:Updater
+		meta(http-equiv="Content-Type", content="text/html;charset=UTF-8")
+		meta(name="viewport" content="width=device-width, initial-scale=1")
+		link(rel="apple-touch-icon" sizes="180x180" href="/asset/favicon/apple-touch-icon.png")
+		link(rel="icon" type="image/png" sizes="32x32" href="/asset/favicon/favicon-32x32.png")
+		link(rel="icon" type="image/png" sizes="16x16" href="/asset/favicon/favicon-16x16.png")
+		link(rel="manifest" href="/asset/favicon/site.webmanifest")
+		link(rel="stylesheet" href="/asset/css/bulma.min.css" type="text/css")
+		link(rel="stylesheet" href="/asset/css/main.css" type="text/css")
+		link(href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet")
+	body
+		section.section
+			.container.rw-header
+				a(href="/")
+					.is-hidden-mobile
+						h1.is-big RetroWiki
+					.is-hidden-tablet
+						h1 RetroWiki
+					h4 FPGA-Team Updater
+			.container.menu
+				h2.menu-title
+					span.is-hidden-mobile ***
+					span= .PageTitle
+					span.is-hidden-mobile ***
+				.menu-body {{embed}}
+			.container
+				.columns
+					.column.is-three-quarters
+						if .IsMain
+							p
+								| #{.T "buttons.click"}:
+								span.cursor-block.blink-me &nbsp;
+						else
+							p #{.T "buttons.clickor"}:
+							a.is-terminal-button.is-inline(href="/")= .T "buttons.return"
+							span.cursor-block.blink-me &nbsp;
+					.column.is-one-quarter.has-text-right
+						.lang-selector
+							if .IsLang "en"
+								a.is-terminal-button.is-inline.is-active(href="/lang/en") EN
+								a.is-terminal-button.is-inline(href="/lang/es") ES
+							else
+								a.is-terminal-button.is-inline(href="/lang/en") EN
+								a.is-terminal-button.is-inline.is-active(href="/lang/es") ES

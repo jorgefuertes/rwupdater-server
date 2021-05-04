@@ -1,0 +1,17 @@
+en:
+  form:
+    contact:
+      name: Your name
+      email: Email
+      subject: Subject
+      message: Message
+      send: Send
+
+es:
+  form:
+    contact:
+      name: Tu nombre
+      email: Tu correo electrónico
+      subject: Asunto
+      message: Mensaje
+      send: Enviar mensaje

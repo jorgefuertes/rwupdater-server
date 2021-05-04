@@ -1,0 +1,9 @@
+if .IsLang "en"
+  h3 Latest version is: #{.Latest}
+else
+  h3 La última versión es: #{.Latest}
+
+ul
+  each _ in .Downloads
+    li
+      a(href=(.Link)) &raquo; #{.Os}/#{.CPU}:  #{.Size} #{.Ext}
