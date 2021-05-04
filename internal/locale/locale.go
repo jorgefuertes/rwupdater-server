@@ -1,7 +1,9 @@
 package locale
 
 import (
+	"embed"
 	"html/template"
+	"net/http"
 	"strings"
 
 	"git.martianoids.com/queru/retroserver/internal/cfg"
@@ -10,11 +12,14 @@ import (
 	"github.com/qor/i18n/backends/yaml"
 )
 
+//go:embed locales
+var locales embed.FS
+
 // I18n - Translations
 var I18n *i18n.I18n
 
 func load() {
-	I18n = i18n.New(yaml.New("locales"))
+	I18n = i18n.New(yaml.NewWithFilesystem(http.FS(locales)))
 }
 
 func init() {
