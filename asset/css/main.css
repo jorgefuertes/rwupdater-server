@@ -14,7 +14,7 @@ p {
 }
 
 .rw-header {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .rw-header > a {
@@ -25,6 +25,13 @@ p {
 .rw-header > a:hover {
   color: #00D696;
   background-color: transparent;
+}
+
+.rw-header > a > h1 {
+  line-height: 1em;
+}
+.rw-header > a > h4 {
+  line-height: .6em;
 }
 
 pre {
@@ -55,6 +62,12 @@ h3 {
 h4 {
   font-size: 1.9rem;
   font-weight: 500;
+}
+
+.is-big {
+  font-size: 10rem;
+  font-weight: 600;
+  line-height: 7.5rem;
 }
 
 .menu {
@@ -177,4 +190,8 @@ button:hover, input[type="submit"]:hover {
 .buttons {
   display: block;
   padding: 1rem 0 1.5rem 0;
+}
+
+.lang-selector > .is-active {
+  border: 1px solid #28755b;
 }

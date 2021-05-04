@@ -8,7 +8,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func apiServer(app *fiber.App) {
+func apiServerCtrl(app *fiber.App) {
 	g := app.Group("/api/server")
 
 	g.Get("/version", func(c *fiber.Ctx) error {

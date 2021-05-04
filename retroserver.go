@@ -20,7 +20,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/session"
-	"github.com/gofiber/template/ace"
+	"github.com/gofiber/template/pug"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
@@ -55,12 +55,18 @@ func main() {
 	cfg.Main.Root = filepath.Dir(".")
 
 	// template engine
-	var engine *ace.Engine
+	var engine *pug.Engine
 	if cfg.IsDev() {
-		engine = ace.New("./views", ".ace")
+		engine = pug.New("views", ".pug")
 	} else {
 		tFS, _ := fs.Sub(views, "views")
-		engine = ace.NewFileSystem(http.FS(tFS), ".ace")
+		engine = pug.NewFileSystem(http.FS(tFS), ".pug")
+	}
+	if err := engine.Load(); err != nil {
+		log.Fatalln(err)
+	}
+	if cfg.IsDev() {
+		engine.Reload(true)
 	}
 
 	// app and configuration
@@ -93,12 +99,18 @@ func main() {
 		},
 	)
 
+	// recover from panic
+	if !cfg.IsDev() {
+		app.Use(recover.New())
+	}
+
 	// session
-	store := session.New(session.Config{Expiration: 8640 * time.Hour})
+	cfg.Session = session.New(session.Config{Expiration: 8640 * time.Hour})
+
 	// stats
 	if cfg.IsProd() {
 		app.Use(func(c *fiber.Ctx) error {
-			matomo.NewVisit(c, store)
+			matomo.NewVisit(c)
 			return c.Next()
 		})
 	}
@@ -126,11 +138,6 @@ func main() {
 			Root:         http.FS(subFS),
 			NotFoundFile: "Static file not found",
 		}))
-	}
-
-	// recover from panic
-	if !cfg.IsDev() {
-		app.Use(recover.New())
 	}
 
 	// startup banner and info

@@ -5,6 +5,7 @@ import (
 	"regexp"
 	"strings"
 
+	"git.martianoids.com/queru/retroserver/internal/helper"
 	"github.com/dustin/go-humanize"
 	"github.com/gofiber/fiber/v2"
 )
@@ -19,10 +20,14 @@ type Download struct {
 	Size    string
 }
 
-func download(app *fiber.App) {
+func downloadCtrl(app *fiber.App) {
 	app.Get("/downloads", func(c *fiber.Ctx) error {
+		h := helper.New(c)
+		h.SetPageTitle("menu.downloads.title")
+
 		r := regexp.MustCompile(`_v([0-9\.]+)-([a-z]+)_([a-z0-9]+)\.(gz|bz|zip)`)
-		dls := make([]Download, 0)
+
+		h.Downloads = make([]helper.Download, 0)
 		dir, err := os.ReadDir("./files/client/dist")
 		if err != nil {
 			return fiber.NewError(fiber.StatusInternalServerError, "error reading dist dir")
@@ -31,7 +36,7 @@ func download(app *fiber.App) {
 			if !r.Match([]byte(f.Name())) {
 				continue
 			}
-			d := new(Download)
+			d := new(helper.Download)
 			d.File = f.Name()
 			fdata := r.FindSubmatch([]byte(d.File))
 			d.Version = string(fdata[1])
@@ -40,14 +45,11 @@ func download(app *fiber.App) {
 			d.Ext = strings.ToTitle(string(fdata[4]))
 			fi, _ := f.Info()
 			d.Size = humanize.Bytes(uint64(fi.Size()))
-			dls = append(dls, *d)
+			h.Downloads = append(h.Downloads, *d)
 		}
+		h.Latest = h.Downloads[0].Version
 
-		return c.Render("downloads", fiber.Map{
-			"PageTitle": "Downloads",
-			"Latest":    dls[0].Version,
-			"Dls":       dls,
-		}, "layouts/main")
+		return h.Render("downloads")
 	})
 
 	app.Get("/download/dist/:fname", func(c *fiber.Ctx) error {
