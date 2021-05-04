@@ -1,0 +1,52 @@
+h4.underlined= .T "menu.about.updater"
+
+if .IsLang "en"
+  p
+    | The RetroWiki's updater software is a server/client architecture intended to be a uniform way
+    |  to update the most usual FPGA based retromachines. Mainly done for the RetroWiki FPGA-Team
+    |  cores.
+  p
+    | We admit mantainers for any unsupported FPGA machines.
+  p
+    | It can work over a directory, you SDCard root for example, or from inside you FPGA machine, if
+    |  it boots on linux like Mister.
+  p
+    | The server infraestructure is provided by RetroWiki free of charge.
+else
+  p
+    | Este software de actualización consiste en una arquitectura cliente/servidor que pretende ser
+    |  un método uniforme de actualizar las máquinas FPGA más utilizadas en retroinformática.
+    |  Se creó principalmente para mantener actualizados los cores del equipo de FPGA del grupo
+    |  RetroWiki.
+  p
+    | También admitimos mantenedores para cualquier máquina FPGA no soportada.
+
+h4.underlined= .T "menu.about.authors"
+
+if .IsLang "en"
+  p This software is written and mantained mainly by:
+  ul
+    li
+      a(href="https://github.com/jorgefuertes") &raquo; #{.T "links.authors.queru"}
+    li
+      a(href="https://github.com/rampa069") &raquo; #{.T "links.authors.rampa"}
+else
+  p Este software ha sido escrito y mantenido principalmente por:
+  ul
+    li
+      a(href="https://github.com/jorgefuertes") &raquo; #{.T "links.authors.queru"}
+    li
+      a(href="https://github.com/rampa069") &raquo; #{.T "links.authors.rampa"}
+
+h4.underlined= .T "menu.about.license"
+
+if .IsLang "en"
+  p Free (as in freedom) software licensed under:
+  ul
+    li
+      a(href="https://www.gnu.org/licenses/gpl-3.0.en.html") &raquo; GPLv3 License
+else
+  p Software libre bajo:
+  ul
+    li
+      a(href="https://www.gnu.org/licenses/gpl-3.0.en.html") &raquo; Licencia GPLv3

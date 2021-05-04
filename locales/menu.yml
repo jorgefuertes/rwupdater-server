@@ -1,0 +1,37 @@
+en:
+  menu:
+    main:
+      title: Main Menu
+    about:
+      title: About
+      updater: The updater software
+      authors: Authors
+      license: License
+    downloads:
+      title: Downloads
+    contrib:
+      title: Contribute
+    contact:
+      title: Contact Form
+      sent: Message sent
+    links:
+      title: Links
+
+es:
+  menu:
+    main:
+      title: Menú Principal
+    about:
+      title: Información
+      updater: El actualizador
+      authors: Autores
+      license: Licencia
+    downloads:
+      title: Descargas
+    contrib:
+      title: Contribuir
+    contact:
+      title: Contactar
+      sent: Mensaje enviado
+    links:
+      title: Enlaces

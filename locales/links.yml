@@ -1,0 +1,39 @@
+en:
+  links:
+    retrowiki:
+      title: RetroWiki
+      forum: Main Forum Page
+      twitch: RetroCrypta on Twitch
+    authors:
+      title: Authors
+      queru: Jorge Fuertes AKA Queru
+      rampa: Ramón Martinez AKA Rampa
+    project:
+      title: Project
+      client: Client GitHub Page
+    fpga:
+      title: FPGA Machines
+      mister: MiSTer
+      mist: MiST
+      manuferhi: ManuFerHi's Store
+      avillena: Antonio Villena's Store
+
+es:
+  links:
+    retrowiki:
+      title: RetroWiki
+      forum: Foro de RetroWiki
+      twitch: RetroCrypta en Twich
+    authors:
+      title: Autores
+      queru: Jorge Fuertes AKA Queru
+      rampa: Ramón Martinez AKA Rampa
+    project:
+      title: Proyecto
+      client: GitHub del cliente
+    fpga:
+      title: Máquinas FPGA
+      mister: MiSTer
+      mist: MiST
+      manuferhi: Tienda de ManuFerHi
+      avillena: Tienda de Antonio Villena

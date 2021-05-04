@@ -2,16 +2,17 @@ package controller
 
 import (
 	"git.martianoids.com/queru/retroserver/internal/contact"
+	"git.martianoids.com/queru/retroserver/internal/helper"
 	"github.com/gofiber/fiber/v2"
 )
 
-func contactForm(app *fiber.App) {
+func contactCtrl(app *fiber.App) {
 	g := app.Group("/contact")
 
 	g.Get("/", func(c *fiber.Ctx) error {
-		return c.Render("contact/form", fiber.Map{
-			"PageTitle": "Contact Form",
-		}, "layouts/main")
+		h := helper.New(c)
+		h.SetPageTitle("menu.contact.title")
+		return h.Render("contact/form")
 	})
 
 	g.Post("/", func(c *fiber.Ctx) error {
@@ -25,8 +26,8 @@ func contactForm(app *fiber.App) {
 		m.IP = c.IP()
 		go m.Send()
 
-		return c.Render("contact/sent", fiber.Map{
-			"PageTitle": "Contact Form",
-		}, "layouts/main")
+		h := helper.New(c)
+		h.SetPageTitle("menu.contact.sent")
+		return h.Render("contact/sent")
 	})
 }
