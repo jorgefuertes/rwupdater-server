@@ -1,19 +1,17 @@
 package controller
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"git.martianoids.com/queru/retroserver/internal/helper"
+	"github.com/gofiber/fiber/v2"
+)
 
-func doc(app *fiber.App) {
+// document controller
+func docCtrl(app *fiber.App) {
 	g := app.Group("/doc")
 
-	g.Get("/about", func(c *fiber.Ctx) error {
-		return c.Render("doc/about", fiber.Map{
-			"PageTitle": "About",
-		}, "layouts/main")
-	})
-
-	g.Get("/contribute", func(c *fiber.Ctx) error {
-		return c.Render("doc/contrib", fiber.Map{
-			"PageTitle": "Contribute",
-		}, "layouts/main")
+	g.Get("/:doc", func(c *fiber.Ctx) error {
+		h := helper.New(c)
+		h.SetPageTitle("menu." + c.Params("doc") + ".title")
+		return h.Render("doc/" + c.Params("doc"))
 	})
 }

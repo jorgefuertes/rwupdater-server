@@ -6,7 +6,7 @@ import (
 )
 
 // controller
-func apiFiles(app *fiber.App) {
+func apiFilesCtrl(app *fiber.App) {
 	g := app.Group("/api/files")
 
 	// file list

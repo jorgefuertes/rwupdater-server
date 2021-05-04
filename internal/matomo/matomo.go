@@ -6,8 +6,8 @@ import (
 	"math/rand"
 	"net/http"
 
+	"git.martianoids.com/queru/retroserver/internal/cfg"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/session"
 	"github.com/gofiber/fiber/v2/utils"
 )
 
@@ -28,18 +28,18 @@ type Visit struct {
 }
 
 // NewVisit - Sends a visit to statistics server
-func NewVisit(c *fiber.Ctx, store *session.Store) {
+func NewVisit(c *fiber.Ctx) {
+	sess, err := cfg.Session.Get(c)
+	if err != nil {
+		panic(err)
+	}
+	defer sess.Save()
+
 	v := new(Visit)
 	v.IDSite = 25
 	v.Rec = 1
 	v.ActionName = ""
 	v.URL = string(c.Request().URI().FullURI())
-
-	sess, err := store.Get(c)
-	if err != nil {
-		panic(err)
-	}
-	defer sess.Save()
 
 	if sess.Get("uuid") == nil {
 		v.ID = utils.UUID()

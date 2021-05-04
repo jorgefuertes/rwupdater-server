@@ -1,0 +1,15 @@
+form(id="contact" action="/contact" method="post")
+  .terminal-control
+    label= .T "form.contact.name"
+    input(type="text" name="name" required="true" minlength="3")
+  .terminal-control
+    label= .T "form.contact.email"
+    input(type="email" name="email" required="true")
+  .terminal-control
+    label= .T "form.contact.subject"
+    input(type="text" name="subject" required="true" minlength="5")
+  .terminal-control
+    label= .T "form.contact.message"
+    textarea(name="message" required="true" minlength="80" maxlength="2048" rows="10")
+  .buttons
+    input(type="submit" value=(.T "form.contact.send"))

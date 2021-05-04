@@ -5,7 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func apiArch(app *fiber.App) {
+func apiArchCtrl(app *fiber.App) {
 	a := app.Group("/api/arch")
 
 	a.Get("/", func(c *fiber.Ctx) error {
