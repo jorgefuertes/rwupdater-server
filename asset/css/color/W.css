@@ -1,0 +1,13 @@
+:root {
+	--color-bg: rgb(20, 20, 20); /* background main */
+	--color-a: rgb(220, 220, 220); /* main */
+	--color-a-low: rgb(200, 200, 200); /* -20 */
+	--color-a-bright: rgb(255, 255, 255); /* Gamma top */
+	--color-b: rgb(210, 210, 210); /* -10 */
+	--color-c: rgb(205, 205, 205); /* -15 */
+}
+
+#rw-logo {
+	/* Calculated over black */
+	filter: invert(78%) sepia(74%) saturate(1%) hue-rotate(13deg) brightness(103%) contrast(86%);
+}
