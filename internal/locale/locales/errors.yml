@@ -1,0 +1,6 @@
+en:
+  errors:
+    "404": Resource not found
+es:
+  errors:
+    "404": No he encontrado el recurso

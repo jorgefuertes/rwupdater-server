@@ -31,6 +31,7 @@ type Helper struct {
 	IsMain    bool
 	Downloads []Download
 	Latest    string
+	Err       string
 }
 
 // New - Create and return new Helper
@@ -45,7 +46,7 @@ func New(c *fiber.Ctx) Helper {
 // SetPageTile - Set the current page title
 func (h *Helper) SetPageTitle(key string) {
 	h.PageTitle = h.T(key)
-	h.IsMain = (key == "menu.main")
+	h.IsMain = (key == "menu.main.title")
 }
 
 // T - Translate
