@@ -16,6 +16,8 @@ en:
       sent: Message sent
     links:
       title: Links
+    usage:
+      title: Usage
 
 es:
   menu:
@@ -35,3 +37,5 @@ es:
       sent: Mensaje enviado
     links:
       title: Enlaces
+    usage:
+      title: Utilización
