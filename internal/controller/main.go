@@ -8,7 +8,7 @@ func Setup(app *fiber.App) {
 	docCtrl(app)
 	downloadCtrl(app)
 	contactCtrl(app)
-	langCtrl(app)
+	prefCtrl(app)
 	errorCtrl(app)
 	apiServerCtrl(app)
 	apiArchCtrl(app)
