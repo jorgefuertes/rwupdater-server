@@ -1,0 +1,40 @@
+h4.underlined Descarga
+
+p Puedes descargar la versión correspondiente a tu sistema operativo desde:
+ul
+	li
+		a(href="/downloads") &raquo; Descargas
+
+h4.underlined En tu ordenador o en tu FPGA
+
+p.
+	Hay dos formas de utilizar el actualizador, la primera es desde tu propio ordenador, insertando
+	la tarjeta SD de tu máquina retro y dándole la ruta correcta al actualizador, y la segunda
+	consiste en descargar este programa dentro de tu SD para utilizarlo desde la misma, bien
+	ejecutándolo mendiante un terminal SSH o bien desde sus propios menús. Evidentemente para que
+	la máquina lo pueda ejecutar debe correr un anfitrión GNU/Linux, como ocurren en máquinas como
+	MiSTer, que disponen de un procesador ARM y ejecutan un sistema linux para controlar la
+	periferia, los menús y los cores.
+
+p.
+	Si tu máquina retro no dispone de este sistema, como es el caso de la MiST, tu única opción es
+	la primera: actualizar la tarjeta SD desde tu ordenador.
+
+h4.underlined ¿Qué me va a actualizar?
+
+p Todo lo que el mantenedor de esa rama haya subido a nuestros repositorios.
+p.
+	Normalmente los cores desarrolladors por el equipo FPGA de RetroWiki, y quizá algunas ROM,
+	imágnes de disco u otros ficheros auxiliares.
+p.
+	Sin embargo has de tener en cuenta que sólo se actualizarán los cores para los que tengamos una
+	versión superior, y los ficheros auxiliares, en caso de existir, no se tocarán.
+p.
+	Esto es importante para no sobreescribir ninguna modificación local que hayas hecho sobre
+	discos y otros ficheros.
+
+h4.underlined Actualización desde el ordenador
+
+p Suponiendo que tu tarjeta SD está montada en <b>/mnt/mistSD</b>:
+p
+	b ./retrowiki-updater_v0.1.4-darwin_amd64 update mist /mnt/mistSD
