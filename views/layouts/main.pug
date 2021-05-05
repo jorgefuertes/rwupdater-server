@@ -9,13 +9,14 @@ html(lang="en")
 		link(rel="icon" type="image/png" sizes="16x16" href="/asset/favicon/favicon-16x16.png")
 		link(rel="manifest" href="/asset/favicon/site.webmanifest")
 		link(rel="stylesheet" href="/asset/css/bulma.min.css" type="text/css")
+		link(rel="stylesheet" href=(.LinkColorCSS) type="text/css")
 		link(rel="stylesheet" href="/asset/css/main.css" type="text/css")
 		link(href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet")
 	body
 		section.section
 			.container.rw-header
 				a(href="/")
-					img(src="/asset/gfx/rwupd.png" alt="RetroWiki FPGA-Team Updater")
+					img#rw-logo(src="/asset/gfx/rwupd.svg" alt="RetroWiki FPGA-Team Updater")
 			.container.menu
 				h2.menu-title
 					span.is-hidden-mobile ***
@@ -25,19 +26,26 @@ html(lang="en")
 			.container
 				.columns
 					.column.is-three-quarters
-						if .IsMain
-							p
+						p
+							if .IsMain
 								span= .T "buttons.click"
 								span.cursor-block.blink-me &nbsp;
-						else
-							a.is-terminal-button.is-inline(href="/")
-								| #{.T "buttons.return"}
-								span.cursor-block.blink-me &nbsp;
-					.column.is-one-quarter.has-text-right
-						.lang-selector
-							if .IsLang "en"
-								a.is-terminal-button.is-inline.is-active(href="/lang/en") EN
-								a.is-terminal-button.is-inline(href="/lang/es") ES
 							else
-								a.is-terminal-button.is-inline(href="/lang/en") EN
-								a.is-terminal-button.is-inline.is-active(href="/lang/es") ES
+								a.is-terminal-button.is-inline.is-small(href="/")
+									| #{.T "buttons.return"}
+									span.cursor-block.blink-me &nbsp;
+					.column.is-one-quarter.has-text-right
+						p.selector
+							span #{.T "buttons.lang"}:
+							each _ in .Langs
+								if .Active
+									a.is-terminal-button.is-inline.is-small.is-upcase.is-active(href=(.Link))= .Abbr
+								else
+									a.is-terminal-button.is-inline.is-small.is-upcase(href=(.Link))= .Abbr
+						p.selector
+							span #{.T "buttons.color"}:
+							each _ in .Colors
+								if .Active
+									a.is-terminal-button.is-inline.is-small.is-upcase.is-active(href=(.Link))= .Abbr
+								else
+									a.is-terminal-button.is-inline.is-small.is-upcase(href=(.Link))= .Abbr
