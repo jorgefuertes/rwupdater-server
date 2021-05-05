@@ -213,3 +213,8 @@ button:hover, input[type="submit"]:hover {
 .is-upcase {
   text-transform: uppercase;
 }
+
+b {
+  font-weight: 800;
+  color: var(--color-a-bright)
+}
