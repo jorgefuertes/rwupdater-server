@@ -2,6 +2,8 @@ package main
 
 import (
 	"embed"
+	"fmt"
+	"html/template"
 	"io/fs"
 	"log"
 	"net/http"
@@ -12,6 +14,7 @@ import (
 	"git.martianoids.com/queru/retroserver/internal/build"
 	"git.martianoids.com/queru/retroserver/internal/cfg"
 	"git.martianoids.com/queru/retroserver/internal/controller"
+	"git.martianoids.com/queru/retroserver/internal/helper"
 	"git.martianoids.com/queru/retroserver/internal/matomo"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
@@ -79,22 +82,19 @@ func main() {
 			ServerHeader:          "RetroServer_" + cfg.Version,
 			DisableStartupMessage: true,
 			Views:                 engine,
-			ErrorHandler: func(ctx *fiber.Ctx, err error) error {
+			ErrorHandler: func(c *fiber.Ctx, err error) error {
+				if err == nil {
+					return nil
+				}
 				code := fiber.StatusInternalServerError
-				txt := banner.Error500
 				if e, ok := err.(*fiber.Error); ok {
 					code = e.Code
 				}
-				if code == 404 {
-					txt = banner.Error404
-				}
-				err = ctx.Status(code).SendString(
-					banner.Title + "\n" + txt + banner.Separator + err.Error() + banner.Separator)
-				if err != nil {
-					return ctx.Status(500).SendString("Internal Server Error")
-				}
+				h := helper.New(c)
+				h.Err = err.Error()
+				h.PageTitle = template.HTML(fmt.Sprintf("ERROR %v", code))
 
-				return nil
+				return h.Render("error/error")
 			},
 		},
 	)
@@ -139,6 +139,15 @@ func main() {
 			NotFoundFile: "Static file not found",
 		}))
 	}
+
+	// error 404 at the very end of stack
+	app.Use(func(c *fiber.Ctx) error {
+		h := helper.New(c)
+		h.Err = string(h.T("errors.404"))
+		h.PageTitle = template.HTML(fmt.Sprintf("ERROR %v", 404))
+
+		return h.Render("error/error")
+	})
 
 	// startup banner and info
 	log.Println(banner.Console)
