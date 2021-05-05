@@ -3,9 +3,13 @@ en:
     return: Return to main menu
     click: Click on your choice
     clickor: Click on your choice or
+    lang: Language
+    color: Colour
 
 es:
   buttons:
     return: Volver al menú principal
     click: Selecciona opción
     clickor: Selecciona opción o
+    lang: Idioma
+    color: Color
