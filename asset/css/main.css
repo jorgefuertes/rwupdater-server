@@ -19,12 +19,13 @@ p {
 
 .rw-header > a {
   padding: 0;
-  color: #00b280;
 }
 
 .rw-header > a:hover {
-  color: #00D696;
+  filter: brightness(1.15);
+  color: none;
   background-color: transparent;
+
 }
 
 .rw-header > a > h1 {
@@ -95,8 +96,9 @@ ul {
 }
 
 ul li {
-    border: none;
-    font-size: 1.1em; }
+  border: none;
+  font-size: 1.1em;
+}
 
 a {
   color: #00D696;
@@ -108,7 +110,8 @@ a {
 a:hover {
   color: #0f2920;
   background-color: #00d696;
-  text-decoration: none; }
+  text-decoration: none;
+}
 
 a.is-terminal {
   background-color: transparent;

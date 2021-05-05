@@ -27,12 +27,12 @@ html(lang="en")
 					.column.is-three-quarters
 						if .IsMain
 							p
-								| #{.T "buttons.click"}:
+								span= .T "buttons.click"
 								span.cursor-block.blink-me &nbsp;
 						else
-							p #{.T "buttons.clickor"}:
-							a.is-terminal-button.is-inline(href="/")= .T "buttons.return"
-							span.cursor-block.blink-me &nbsp;
+							a.is-terminal-button.is-inline(href="/")
+								| #{.T "buttons.return"}
+								span.cursor-block.blink-me &nbsp;
 					.column.is-one-quarter.has-text-right
 						.lang-selector
 							if .IsLang "en"
