@@ -19,6 +19,7 @@ type Helper struct {
 	Err       string
 	Colors    []Color
 	Langs     []Lang
+	MyURL     string
 }
 
 // New - Create and return new Helper
@@ -35,6 +36,9 @@ func New(c *fiber.Ctx) Helper {
 	h.Lang = locale.GetUserLang(c)
 	h.Langs = make([]Lang, 0)
 	h.Langs = append(h.Langs, Lang{"en", h.IsActiveLang("en")}, Lang{"es", h.IsActiveLang("es")})
+	// url
+	h.MyURL = c.BaseURL()
+	// free controller vars
 	h.Vars = make(fiber.Map)
 	return *h
 }
