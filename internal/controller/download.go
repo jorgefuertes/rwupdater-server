@@ -1,12 +1,9 @@
 package controller
 
 import (
-	"os"
-	"regexp"
-	"strings"
+	"fmt"
 
 	"git.martianoids.com/queru/retroserver/internal/helper"
-	"github.com/dustin/go-humanize"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -24,40 +21,35 @@ func downloadCtrl(app *fiber.App) {
 	app.Get("/downloads", func(c *fiber.Ctx) error {
 		h := helper.New(c)
 		h.SetPageTitle("menu.downloads.title")
-
-		r := regexp.MustCompile(`_v([0-9\.]+)-([a-z]+)_([a-z0-9]+)\.(gz|bz|zip)`)
-
-		h.Downloads = make([]helper.Download, 0)
-		dir, err := os.ReadDir("./files/client/dist")
-		if err != nil {
-			return fiber.NewError(fiber.StatusInternalServerError, "error reading dist dir")
-		}
-		for _, f := range dir {
-			if !r.Match([]byte(f.Name())) {
-				continue
-			}
-			d := new(helper.Download)
-			d.File = f.Name()
-			fdata := r.FindSubmatch([]byte(d.File))
-			d.Version = string(fdata[1])
-			d.Os = string(fdata[2])
-			d.CPU = string(fdata[3])
-			d.Ext = strings.ToTitle(string(fdata[4]))
-			fi, _ := f.Info()
-			d.Size = humanize.Bytes(uint64(fi.Size()))
-			h.Downloads = append(h.Downloads, *d)
-		}
-		h.Latest = h.Downloads[0].Version
-
+		h.FillDownloads()
 		return h.Render("downloads")
 	})
 
-	app.Get("/download/dist/:fname", func(c *fiber.Ctx) error {
-		if _, err := os.Stat("./files/client/dist/" + c.Params("fname")); err != nil {
-			return fiber.ErrNotFound
+	app.Get("/download/:mode/:os/:arch", func(c *fiber.Ctx) error {
+		h := helper.New(c)
+		if err := h.FillDownloads(); err != nil {
+			return err
+		}
+		d, err := h.FindDownload(c.Params("os"), c.Params("arch"))
+		if err != nil {
+			return err
 		}
 
-		c.Set("Content-Disposition", "inline; filename=\""+c.Params("fname")+"\"")
-		return c.SendFile("./files/client/dist/"+c.Params("fname"), false)
+		if c.Params("mode") == "dist" {
+			c.Set("Content-Disposition", "inline; filename=\""+d.Dist.File+"\"")
+			c.Set("Content-Type", "application/zip")
+			return c.SendFile("./files/client/dist/"+d.Dist.File, false)
+		}
+
+		if c.Params("mode") == "bin" {
+			c.Set("Content-Disposition", "inline; filename=\""+d.Bin.File+"\"")
+			c.Set("Content-Type", "application/x-executable")
+			return c.SendFile(
+				fmt.Sprintf("./files/client/bin/%s/%s/%s", d.Os, d.CPU, d.Bin.File),
+				false,
+			)
+		}
+
+		return fiber.NewError(fiber.ErrNotFound.Code, "File not found")
 	})
 }
