@@ -54,7 +54,7 @@ func (h *Helper) FillDownloads() error {
 		return fiber.NewError(fiber.StatusInternalServerError, "error reading dist dir")
 	}
 
-	r := regexp.MustCompile(`_v([0-9\.]+)-([a-z]+)_([a-z0-9]+)\.(gz|bz|zip)`)
+	r := regexp.MustCompile(`_v([0-9\.]+)-([a-z]+)_([a-z0-9]+)\.(tar.gz|tar.bz|zip)`)
 	for _, f := range dir {
 		if !r.Match([]byte(f.Name())) {
 			continue
