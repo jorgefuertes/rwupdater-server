@@ -5,6 +5,14 @@ ul
 	li
 		a(href="/downloads") &raquo; Descargas
 
+p.
+	En esa página puedes obtener los enlaces para descargar un binario directamente o un paquete
+	comprimido.
+
+p Por ejemplo para descargar directamente la última versión para GNU/Linux:
+
+code curl -o rw-updater #{.MyURL}/download/bin/linux/amd64
+
 h4.underlined En tu ordenador o en tu FPGA
 
 p.
@@ -35,9 +43,48 @@ p.
 
 h4.underlined Actualización desde el ordenador
 
-p Suponiendo que tu tarjeta SD está montada en <b>/mnt/mistSD</b>:
-p
-	b ./retrowiki-updater_v0.1.4-linux_amd64 update mist /mnt/mistSD
+p.
+	Descarga la versión correspondiente a tu sistema y ejecuta, suponiendo que tu tarjeta SD está
+	montada en <b>/mnt/mistSD</b>:
+
+code ./rw-updater update mist /mnt/mistSD
 
 h4.underlined Actualización desde una MiSTer
+
+p.
+	Accede mediante SSH a tu MiSTer y descarga el updater:
+
+code.
+	ssh root@IP_DE_MI_MISTER<br/>
+	mkdir /media/fat/retrowiki-bin<br/>
+	cd /media/fat/retrowiki-bin<br/>
+	curl -k -o rw-updater #{.MyURL}/download/bin/linux/arm<br/>
+
+p Ahora para bajar o actualizar los cores base:
+code.
+	./rw-updater update mist-base /media/fat
+
+p Si tu mister dispone de módulo SRAM:
+code.
+	./rw-updater update mist-sram /media/fat
+
+p Si dispones del módulo R888:
+code.
+	./rw-updater update mist-r888 /media/fat
+
+h4.underlined Ayuda
+
+p Para ver la ayuda del updater:
+code.
+	./rw-updater --help
+
+h4.underlined Otras arquitecturas
+code.
+	./rw-updater arch-list
+
+h4.underlined Eso es todo
+
+p.
+	Las sucesivas actualizaciones se hacen exactamente igual. Además el updater se actualiza a sí
+	mismo a partir de la versión 0.1.5, pero recuerda actualizar a mano si todavía tienes una 0.1.4.
 
