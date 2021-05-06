@@ -218,3 +218,25 @@ b {
   font-weight: 800;
   color: var(--color-a-bright)
 }
+
+table {
+  width: 100%
+}
+
+table td, table th {
+  color: var(--color-a);
+  font-size: 2rem;
+  padding: .2rem;
+}
+
+table tr {
+  border-bottom: 1px solid var(--color-c);
+}
+
+table > tbody > tr:last-child {
+  border-bottom: 0;
+}
+
+table > tbody > tr > td > a {
+  font-size: 1.8rem;
+}
