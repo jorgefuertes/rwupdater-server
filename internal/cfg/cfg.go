@@ -2,8 +2,6 @@ package cfg
 
 import (
 	"time"
-
-	"github.com/gofiber/fiber/v2/middleware/session"
 )
 
 // AppName - Applicaton name
@@ -34,9 +32,6 @@ const AvailableLangReg = `^(en|es)$`
 
 // Main - Main configuration
 var Main MainConfig
-
-// store - Session
-var Session *session.Store
 
 // IsDev - Boolean
 func IsDev() bool {

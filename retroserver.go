@@ -8,7 +8,6 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
-	"time"
 
 	"git.martianoids.com/queru/retroserver/internal/banner"
 	"git.martianoids.com/queru/retroserver/internal/build"
@@ -16,13 +15,13 @@ import (
 	"git.martianoids.com/queru/retroserver/internal/controller"
 	"git.martianoids.com/queru/retroserver/internal/helper"
 	"git.martianoids.com/queru/retroserver/internal/matomo"
+	"git.martianoids.com/queru/retroserver/internal/sess"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
-	"github.com/gofiber/fiber/v2/middleware/session"
 	"github.com/gofiber/template/pug"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
@@ -104,8 +103,8 @@ func main() {
 		app.Use(recover.New())
 	}
 
-	// session
-	cfg.Session = session.New(session.Config{Expiration: 8640 * time.Hour})
+	// store
+	sess.NewStore()
 
 	// stats
 	if cfg.IsProd() {
