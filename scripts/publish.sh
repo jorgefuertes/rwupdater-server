@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 SCRIPTS=$(dirname $0)
-SERVER_IP="server.abadiaretro.com"
+SERVER_IP="updater.retrowiki.es"
 SV_HOME="/home/retroserver"
 SV_SERVER_NAME="retroserver"
 
