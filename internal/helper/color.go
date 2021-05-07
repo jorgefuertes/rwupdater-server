@@ -15,7 +15,7 @@ func (l *Color) Link() string {
 func (h *Helper) GetUserColor() string {
 	sess, err := cfg.Session.Get(h.Ctx)
 	if err != nil {
-		panic(err)
+		return "G"
 	}
 
 	if sess.Get("color") != nil {
