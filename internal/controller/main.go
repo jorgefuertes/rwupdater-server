@@ -13,4 +13,5 @@ func Setup(app *fiber.App) {
 	apiServerCtrl(app)
 	apiArchCtrl(app)
 	apiFilesCtrl(app)
+	apiVersionCtrl(app)
 }
