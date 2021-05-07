@@ -6,7 +6,7 @@ import (
 	"math/rand"
 	"net/http"
 
-	"git.martianoids.com/queru/retroserver/internal/cfg"
+	"git.martianoids.com/queru/retroserver/internal/sess"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/utils"
 )
@@ -29,11 +29,12 @@ type Visit struct {
 
 // NewVisit - Sends a visit to statistics server
 func NewVisit(c *fiber.Ctx) {
-	sess, err := cfg.Session.Get(c)
+	s, err := sess.Get(c)
 	if err != nil {
-		panic(err)
+		log.Println("Stats_NewVisit: Cannot get sess")
+		return
 	}
-	defer sess.Save()
+	defer s.Save()
 
 	v := new(Visit)
 	v.IDSite = 25
@@ -41,11 +42,11 @@ func NewVisit(c *fiber.Ctx) {
 	v.ActionName = ""
 	v.URL = string(c.Request().URI().FullURI())
 
-	if sess.Get("uuid") == nil {
+	if s.Get("uuid") == nil {
 		v.ID = utils.UUID()
-		sess.Set("uuid", v.ID)
+		s.Set("uuid", v.ID)
 	} else {
-		v.ID = sess.Get("uuid").(string)
+		v.ID = s.Get("uuid").(string)
 	}
 
 	v.Rand = rand.Uint64()

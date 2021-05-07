@@ -3,10 +3,11 @@ package locale
 import (
 	"embed"
 	"html/template"
+	"log"
 	"net/http"
 	"strings"
 
-	"git.martianoids.com/queru/retroserver/internal/cfg"
+	"git.martianoids.com/queru/retroserver/internal/sess"
 	"github.com/gofiber/fiber/v2"
 	"github.com/qor/i18n"
 	"github.com/qor/i18n/backends/yaml"
@@ -33,23 +34,25 @@ func Refresh() {
 
 // SetUserLang - Set the user's session language.
 func SetUserLang(c *fiber.Ctx, l string) {
-	sess, err := cfg.Session.Get(c)
+	s, err := sess.Get(c)
 	if err != nil {
-		panic(err)
+		log.Println("SetUserLang: Cannot get sess")
+		return
 	}
-	defer sess.Save()
-	sess.Set("lang", l)
+	defer s.Save()
+	s.Set("lang", l)
 }
 
 // GetUserLang - Returns the user's session lang. English as default.
 func GetUserLang(c *fiber.Ctx) string {
-	sess, err := cfg.Session.Get(c)
+	s, err := sess.Get(c)
 	if err != nil {
-		panic(err)
+		log.Println("GetUserLang: Cannot get sess")
+		return "en"
 	}
 
-	if sess.Get("lang") != nil {
-		return sess.Get("lang").(string)
+	if s.Get("lang") != nil {
+		return s.Get("lang").(string)
 	} else {
 		if strings.HasPrefix(c.Get("Accept-Language"), "es") {
 			return "es"
