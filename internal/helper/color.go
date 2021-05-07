@@ -1,6 +1,10 @@
 package helper
 
-import "git.martianoids.com/queru/retroserver/internal/cfg"
+import (
+	"log"
+
+	"git.martianoids.com/queru/retroserver/internal/sess"
+)
 
 type Color struct {
 	Abbr   string
@@ -13,13 +17,14 @@ func (l *Color) Link() string {
 
 // GetUserColor - Get user color
 func (h *Helper) GetUserColor() string {
-	sess, err := cfg.Session.Get(h.Ctx)
+	s, err := sess.Get(h.Ctx)
 	if err != nil {
+		log.Println("GetUserColor: Cannot get sess")
 		return "G"
 	}
 
-	if sess.Get("color") != nil {
-		return sess.Get("color").(string)
+	if s.Get("color") != nil {
+		return s.Get("color").(string)
 	}
 
 	// default to green
@@ -33,12 +38,13 @@ func (h *Helper) LinkColorCSS() string {
 
 // SetColor - Set user color
 func (h *Helper) SetUserColor(color string) {
-	sess, err := cfg.Session.Get(h.Ctx)
+	s, err := sess.Get(h.Ctx)
 	if err != nil {
-		panic(err)
+		log.Println("SetUserColor: Cannot get sess")
+		return
 	}
-	defer sess.Save()
-	sess.Set("color", color)
+	defer s.Save()
+	s.Set("color", color)
 }
 
 // IsActiveColor - bool true if color is this
