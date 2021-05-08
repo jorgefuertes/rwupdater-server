@@ -12,7 +12,7 @@ type Color struct {
 }
 
 func (l *Color) Link() string {
-	return "/pref/color/" + l.Abbr
+	return "?color=" + l.Abbr
 }
 
 // GetUserColor - Get user color
