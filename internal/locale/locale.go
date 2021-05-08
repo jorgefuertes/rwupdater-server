@@ -43,12 +43,12 @@ func GetUserLang(c *fiber.Ctx) string {
 	if s.Get("lang") != nil {
 		return s.Get("lang").(string)
 	} else {
-		if strings.HasPrefix(c.Get("Accept-Language"), "es") {
-			return "es"
+		if strings.HasPrefix(c.Get("Accept-Language"), "en") {
+			return "en"
 		}
 	}
 
-	return "en"
+	return "es"
 }
 
 // T - Translate
