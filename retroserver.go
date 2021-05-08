@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+	"strings"
 
 	"git.martianoids.com/queru/retroserver/internal/banner"
 	"git.martianoids.com/queru/retroserver/internal/build"
@@ -105,6 +106,32 @@ func main() {
 
 	// store
 	sess.NewStore()
+
+	// preferences
+	app.Use(func(c *fiber.Ctx) error {
+		if strings.HasPrefix(c.Path(), "/api") {
+			return c.Next()
+		}
+		if c.Query("lang") != "" {
+			s, err := sess.Get(c)
+			if err != nil {
+				log.Println("SetUserLang: Cannot get sess")
+				return c.Next()
+			}
+			s.Set("lang", c.Query("lang"))
+			s.Save()
+		}
+		if c.Query("color") != "" {
+			s, err := sess.Get(c)
+			if err != nil {
+				log.Println("SetUserColor: Cannot get sess")
+				return c.Next()
+			}
+			s.Set("color", c.Query("color"))
+			s.Save()
+		}
+		return c.Next()
+	})
 
 	// stats
 	if cfg.IsProd() {
