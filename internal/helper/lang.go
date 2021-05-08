@@ -12,7 +12,7 @@ type Lang struct {
 }
 
 func (l *Lang) Link() string {
-	return "/pref/lang/" + l.Abbr
+	return "?lang=" + l.Abbr
 }
 
 // SetPageTile - Set the current page title

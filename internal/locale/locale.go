@@ -32,23 +32,12 @@ func Refresh() {
 	load()
 }
 
-// SetUserLang - Set the user's session language.
-func SetUserLang(c *fiber.Ctx, l string) {
-	s, err := sess.Get(c)
-	if err != nil {
-		log.Println("SetUserLang: Cannot get sess")
-		return
-	}
-	defer s.Save()
-	s.Set("lang", l)
-}
-
 // GetUserLang - Returns the user's session lang. English as default.
 func GetUserLang(c *fiber.Ctx) string {
 	s, err := sess.Get(c)
 	if err != nil {
 		log.Println("GetUserLang: Cannot get sess")
-		return "en"
+		return "es"
 	}
 
 	if s.Get("lang") != nil {
