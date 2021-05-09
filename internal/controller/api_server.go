@@ -8,16 +8,12 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func apiServerCtrl(app *fiber.App) {
-	g := app.Group("/api/server")
-
-	g.Get("/version", func(c *fiber.Ctx) error {
-		return c.SendString(fmt.Sprintf(
-			"+ SERVER VERSION:\n\n- %s\n- %s\n- %s\n- %s\n",
-			build.Version(),
-			build.VersionShort(),
-			build.BinVersion(),
-			build.CompileTime(),
-		))
-	})
+func APIServer(c *fiber.Ctx) error {
+	return c.SendString(fmt.Sprintf(
+		"+ SERVER VERSION:\n\n- %s\n- %s\n- %s\n- %s\n",
+		build.Version(),
+		build.VersionShort(),
+		build.BinVersion(),
+		build.CompileTime(),
+	))
 }

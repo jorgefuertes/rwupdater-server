@@ -6,28 +6,24 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func contactCtrl(app *fiber.App) {
-	g := app.Group("/contact")
+func FrontContact(c *fiber.Ctx) error {
+	h := helper.New(c)
+	h.SetPageTitle("menu.contact.title")
+	return h.Render(c, "contact/form")
+}
 
-	g.Get("/", func(c *fiber.Ctx) error {
-		h := helper.New(c)
-		h.SetPageTitle("menu.contact.title")
-		return h.Render("contact/form")
-	})
+func FrontContactPost(c *fiber.Ctx) error {
+	m := contact.New()
+	m.Name = c.FormValue("name")
+	m.ReplyTo = c.FormValue("email")
+	m.Subject = c.FormValue("subject")
+	m.Message = c.FormValue("message")
+	m.Agent = c.Get("User-Agent")
+	m.Lang = c.Get("Accept-Language")
+	m.IP = c.IP()
+	go m.Send()
 
-	g.Post("/", func(c *fiber.Ctx) error {
-		m := contact.New()
-		m.Name = c.FormValue("name")
-		m.ReplyTo = c.FormValue("email")
-		m.Subject = c.FormValue("subject")
-		m.Message = c.FormValue("message")
-		m.Agent = c.Get("User-Agent")
-		m.Lang = c.Get("Accept-Language")
-		m.IP = c.IP()
-		go m.Send()
-
-		h := helper.New(c)
-		h.SetPageTitle("menu.contact.sent")
-		return h.Render("contact/sent")
-	})
+	h := helper.New(c)
+	h.SetPageTitle("menu.contact.sent")
+	return h.Render(c, "contact/sent")
 }

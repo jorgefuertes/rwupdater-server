@@ -6,12 +6,8 @@ import (
 )
 
 // document controller
-func docCtrl(app *fiber.App) {
-	g := app.Group("/doc")
-
-	g.Get("/:doc", func(c *fiber.Ctx) error {
-		h := helper.New(c)
-		h.SetPageTitle("menu." + c.Params("doc") + ".title")
-		return h.Render("doc/" + c.Params("doc"))
-	})
+func FrontDoc(c *fiber.Ctx) error {
+	h := helper.New(c)
+	h.SetPageTitle("menu." + c.Params("doc") + ".title")
+	return h.Render(c, "doc/"+c.Params("doc"))
 }
