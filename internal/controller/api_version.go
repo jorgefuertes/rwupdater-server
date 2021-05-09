@@ -5,13 +5,9 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func apiVersionCtrl(app *fiber.App) {
-	a := app.Group("/api/version")
+func APIVersionClient(c *fiber.Ctx) error {
+	h := helper.New(c)
+	h.FillDownloads()
 
-	a.Get("/client", func(c *fiber.Ctx) error {
-		h := helper.New(c)
-		h.FillDownloads()
-
-		return c.JSON(fiber.Map{"latest": h.Downloads[0].Version})
-	})
+	return c.JSON(fiber.Map{"latest": h.Downloads[0].Version})
 }

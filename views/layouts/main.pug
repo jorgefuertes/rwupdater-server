@@ -15,7 +15,7 @@ html(lang="en")
 	body
 		section.section
 			.container.rw-header
-				a(href="/")
+				a(href=(.LinkTo ""))
 					img#rw-logo(src="/asset/gfx/rwupd.svg" alt="RetroWiki FPGA-Team Updater")
 			.container.menu
 				h2.menu-title
@@ -31,7 +31,7 @@ html(lang="en")
 								span= .T "buttons.click"
 								span.cursor-block.blink-me &nbsp;
 							else
-								a.is-terminal-button.is-inline.is-small(href="/")
+								a.is-terminal-button.is-inline.is-small(href=(.LinkTo ""))
 									| #{.T "buttons.return"}
 									span.cursor-block.blink-me &nbsp;
 					.column.is-one-quarter.has-text-right

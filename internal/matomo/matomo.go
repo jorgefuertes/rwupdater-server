@@ -6,9 +6,7 @@ import (
 	"math/rand"
 	"net/http"
 
-	"git.martianoids.com/queru/retroserver/internal/sess"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/utils"
 )
 
 const MURL = "https://stats.martianoids.com/matomo.php"
@@ -29,26 +27,11 @@ type Visit struct {
 
 // NewVisit - Sends a visit to statistics server
 func NewVisit(c *fiber.Ctx) {
-	s, err := sess.Get(c)
-	if err != nil {
-		log.Println("Stats_NewVisit: Cannot get sess")
-		return
-	}
-	defer s.Save()
-
 	v := new(Visit)
 	v.IDSite = 25
 	v.Rec = 1
 	v.ActionName = ""
 	v.URL = string(c.Request().URI().FullURI())
-
-	if s.Get("uuid") == nil {
-		v.ID = utils.UUID()
-		s.Set("uuid", v.ID)
-	} else {
-		v.ID = s.Get("uuid").(string)
-	}
-
 	v.Rand = rand.Uint64()
 	v.Version = 1
 	v.Ref = string(c.Context().Referer())

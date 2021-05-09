@@ -5,15 +5,12 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func apiArchCtrl(app *fiber.App) {
-	a := app.Group("/api/arch")
+// APIArch - Arch list
+func APIArch(c *fiber.Ctx) error {
+	list, err := catalog.ArchList()
+	if err != nil {
+		return err
+	}
 
-	a.Get("/", func(c *fiber.Ctx) error {
-		list, err := catalog.ArchList()
-		if err != nil {
-			return err
-		}
-
-		return c.JSON(list)
-	})
+	return c.JSON(list)
 }
