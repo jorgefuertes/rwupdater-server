@@ -126,7 +126,7 @@ func main() {
 	api := app.Group("/api")
 	api.Get("/server", controller.APIServer)
 	api.Get("/arch", controller.APIArch)
-	api.Get("/file/list", controller.APIFileList)
+	api.Get("/files/catalog/:arch", controller.APIFileList)
 	api.Get("/download/:arch/:id", controller.APIDownload)
 	api.Get("/version/client", controller.APIVersionClient)
 	// front
