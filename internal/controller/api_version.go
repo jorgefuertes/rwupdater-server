@@ -9,5 +9,5 @@ func APIVersionClient(c *fiber.Ctx) error {
 	h := helper.New(c)
 	h.FillDownloads()
 
-	return c.JSON(fiber.Map{"latest": h.Downloads[0].Version})
+	return c.JSON(fiber.Map{"latest": "v" + h.Downloads[0].Version})
 }
