@@ -8,7 +8,6 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
-	"strings"
 
 	"git.martianoids.com/queru/retroserver/internal/banner"
 	"git.martianoids.com/queru/retroserver/internal/build"
@@ -16,7 +15,6 @@ import (
 	"git.martianoids.com/queru/retroserver/internal/controller"
 	"git.martianoids.com/queru/retroserver/internal/helper"
 	"git.martianoids.com/queru/retroserver/internal/matomo"
-	"git.martianoids.com/queru/retroserver/internal/sess"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -94,7 +92,7 @@ func main() {
 				h.Err = err.Error()
 				h.PageTitle = template.HTML(fmt.Sprintf("ERROR %v", code))
 
-				return h.Render("error/error")
+				return h.Render(c, "error/error")
 			},
 		},
 	)
@@ -103,35 +101,6 @@ func main() {
 	if !cfg.IsDev() {
 		app.Use(recover.New())
 	}
-
-	// store
-	sess.NewStore()
-
-	// preferences
-	app.Use(func(c *fiber.Ctx) error {
-		if strings.HasPrefix(c.Path(), "/api") {
-			return c.Next()
-		}
-		if c.Query("lang") != "" {
-			s, err := sess.Get(c)
-			if err != nil {
-				log.Println("SetUserLang: Cannot get sess")
-				return c.Next()
-			}
-			s.Set("lang", c.Query("lang"))
-			s.Save()
-		}
-		if c.Query("color") != "" {
-			s, err := sess.Get(c)
-			if err != nil {
-				log.Println("SetUserColor: Cannot get sess")
-				return c.Next()
-			}
-			s.Set("color", c.Query("color"))
-			s.Save()
-		}
-		return c.Next()
-	})
 
 	// stats
 	if cfg.IsProd() {
@@ -153,7 +122,27 @@ func main() {
 	app.Use(cors.New())
 
 	// routes
-	controller.Setup(app)
+	// api
+	api := app.Group("/api")
+	api.Get("/server", controller.APIServer)
+	api.Get("/arch", controller.APIArch)
+	api.Get("/file/list", controller.APIFileList)
+	api.Get("/download/:arch/:id", controller.APIDownload)
+	api.Get("/version/client", controller.APIVersionClient)
+	// front
+	front := app.Group("/front/:lang/:color")
+	// index
+	front.Get("/", controller.FrontIndex)
+	// doc
+	front.Get("/doc/:doc", controller.FrontDoc)
+	// contact
+	front.Get("/contact", controller.FrontContact)
+	front.Post("/contact", controller.FrontContactPost)
+	// downloads
+	front.Get("/downloads", controller.FrontDownloads)
+	app.Get("/download/:mode/:os/:arch", controller.DownloadHandler)
+	// error
+	app.Get("/error/:code", controller.FrontError)
 
 	// static assets
 	if cfg.IsDev() {
@@ -166,13 +155,16 @@ func main() {
 		}))
 	}
 
+	// index
+	app.Get("/", controller.Index)
+
 	// error 404 at the very end of stack
 	app.Use(func(c *fiber.Ctx) error {
 		h := helper.New(c)
 		h.Err = string(h.T("errors.404"))
 		h.PageTitle = template.HTML(fmt.Sprintf("ERROR %v", 404))
 
-		return h.Render("error/error")
+		return h.Render(c, "error/error")
 	})
 
 	// startup banner and info

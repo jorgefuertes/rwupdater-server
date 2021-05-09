@@ -1,53 +1,40 @@
 package helper
 
 import (
-	"log"
+	"strings"
 
-	"git.martianoids.com/queru/retroserver/internal/sess"
+	"github.com/gofiber/fiber/v2"
 )
 
 type Color struct {
+	Name   string
 	Abbr   string
+	Link   string
 	Active bool
 }
 
-func (l *Color) Link() string {
-	return "?color=" + l.Abbr
+func (h *Helper) fillColors(c *fiber.Ctx) {
+	h.Color = c.Params("color")
+	h.Colors = make([]Color, 0)
+	if h.Color == "" {
+		h.Color = "amber"
+	}
+	for _, name := range colors {
+		h.Colors = append(h.Colors,
+			Color{
+				Name:   name,
+				Abbr:   strings.ToUpper(string(name[0])),
+				Link:   h.colorLink(c, name),
+				Active: (h.Color == name),
+			})
+	}
 }
 
-// GetUserColor - Get user color
-func (h *Helper) GetUserColor() string {
-	s, err := sess.Get(h.Ctx)
-	if err != nil {
-		log.Println("GetUserColor: Cannot get sess")
-		return "G"
-	}
-
-	if s.Get("color") != nil {
-		return s.Get("color").(string)
-	}
-
-	// default to green
-	return "G"
+func (h *Helper) colorLink(c *fiber.Ctx, name string) string {
+	return "/front/" + c.Params("lang") + "/" + name
 }
 
 // GetColorCSS
 func (h *Helper) LinkColorCSS() string {
-	return "/asset/css/color/" + h.GetUserColor() + ".css"
-}
-
-// SetColor - Set user color
-func (h *Helper) SetUserColor(color string) {
-	s, err := sess.Get(h.Ctx)
-	if err != nil {
-		log.Println("SetUserColor: Cannot get sess")
-		return
-	}
-	defer s.Save()
-	s.Set("color", color)
-}
-
-// IsActiveColor - bool true if color is this
-func (h *Helper) IsActiveColor(color string) bool {
-	return h.GetUserColor() == color
+	return "/asset/css/color/" + h.Color + ".css"
 }
