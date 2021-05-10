@@ -11,10 +11,7 @@ source scripts/build_common.inc.sh
 mkdir -p bin
 rm -f bin/$EXE_NAME*
 
-OS="darwin"
-ARCH="amd64"
-EXT=""
-GOOS=$OS GOARCH=$ARCH go build -ldflags "${FLAGS}" -o tmp/retroserver retroserver.go
+GOOS=darwin GOARCH=amd64 go build -ldflags "${FLAGS}" -o tmp/retroserver retroserver.go
 if [[ $? -ne 0 ]]
 then
     echo "Compilation error!"
