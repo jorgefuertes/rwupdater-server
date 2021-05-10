@@ -11,6 +11,7 @@ en:
     project:
       title: Project
       client: Client GitHub Page
+      server: Server GitHub Page
     fpga:
       title: FPGA Machines
       mister: MiSTer
@@ -31,6 +32,7 @@ es:
     project:
       title: Proyecto
       client: GitHub del cliente
+      server: GitHub del servidor
     fpga:
       title: Máquinas FPGA
       mister: MiSTer
