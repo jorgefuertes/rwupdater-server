@@ -10,8 +10,7 @@ fi
 git status | egrep "working tree clean|el árbol de trabajo está limpio" &> /dev/null
 if [[ $? -ne 0 ]]
 then
-	echo "Commit local changes and create a new tag first"
-	#exit 1
+	echo "WARNING: There's uncommited local changes"
 fi
 
 git describe --tags --contains &> /dev/null
@@ -46,9 +45,24 @@ fi
 BUILD=$(($BUILD + 1))
 echo $BUILD > .build
 
+# SMTP settings
+if [[ -f scripts/smtp_config.sh ]]
+then
+	source scripts/smtp_config.sh
+else
+	echo "Please configure your smtp settings"
+	echo "See scripts/smtp_config.sh.dist"
+	exit 1
+fi
+
 FLAGS="-s -w \
 	-X git.martianoids.com/queru/retroserver/internal/build.version=${VER} \
 	-X git.martianoids.com/queru/retroserver/internal/build.user=${WHO} \
 	-X git.martianoids.com/queru/retroserver/internal/build.time=${TIME} \
 	-X git.martianoids.com/queru/retroserver/internal/build.number=${BUILD} \
+	-X git.martianoids.com/queru/retroserver/internal/cfg.SMTPHost=${SMTPHost} \
+	-X git.martianoids.com/queru/retroserver/internal/cfg.SMTPPort=${SMTPPort} \
+	-X git.martianoids.com/queru/retroserver/internal/cfg.SMTPUser=${SMTPUser} \
+	-X git.martianoids.com/queru/retroserver/internal/cfg.SMTPPass=${SMTPPass} \
+	-X git.martianoids.com/queru/retroserver/internal/cfg.SMTPTo=${SMTPTo} \
 "

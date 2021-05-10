@@ -7,11 +7,15 @@ import (
 // AppName - Applicaton name
 const AppName = "RetroWiki FPGA Files Server"
 
-// Version - Application version
-const Version = "0.1.1b"
-
 // Author - Application author
 const Author = "©2021 Jorge Fuertes & Ramón Martinez"
+
+// smtp
+var SMTPHost = "undefined"
+var SMTPPort = "undefined"
+var SMTPUser = "undefined"
+var SMTPPass = "undefined"
+var SMTPTo = "undefined"
 
 // MainConfig - main config type
 type MainConfig struct {
