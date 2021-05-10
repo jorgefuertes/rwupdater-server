@@ -24,3 +24,4 @@ files/
 /work
 node_modules
 scripts/smtp_config.sh
+.vscode
