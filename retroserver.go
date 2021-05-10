@@ -7,6 +7,7 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 
 	"git.martianoids.com/queru/retroserver/internal/banner"
@@ -48,12 +49,18 @@ func main() {
 	cfg.Main.Server.Concurrency = kingpin.Flag("concurrency",
 		"Maximum number of concurrent connections in MiB").Default("256").Int()
 
-	kingpin.UsageTemplate(kingpin.CompactUsageTemplate).Version(cfg.Version).Author(cfg.Author)
+	kingpin.UsageTemplate(kingpin.CompactUsageTemplate).Version(build.VersionShort()).
+		Author(cfg.Author)
 	kingpin.CommandLine.Help = "Web Application Server"
 	kingpin.Parse()
 
 	// root path
 	cfg.Main.Root = filepath.Dir(".")
+
+	if cfg.SMTPHost == "undefined" {
+		log.Fatalln("SMTP Settings are undefined")
+		os.Exit(1)
+	}
 
 	// template engine
 	var engine *pug.Engine
@@ -77,7 +84,7 @@ func main() {
 			WriteTimeout:          *cfg.Main.Server.WTimeout,
 			BodyLimit:             *cfg.Main.Server.BodyLimitMb * 1024 * 1024,
 			Concurrency:           *cfg.Main.Server.Concurrency * 1024,
-			ServerHeader:          "RetroServer_" + cfg.Version,
+			ServerHeader:          "RetroServer_" + build.VersionShort(),
 			DisableStartupMessage: true,
 			Views:                 engine,
 			ErrorHandler: func(c *fiber.Ctx, err error) error {

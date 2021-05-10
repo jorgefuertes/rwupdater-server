@@ -6,16 +6,12 @@ import (
 	"html/template"
 	"log"
 	"net/smtp"
+
+	"git.martianoids.com/queru/retroserver/internal/cfg"
 )
 
 //go:embed "contact.txt"
 var Tmpl string
-
-const host = "mail.martianoids.com"
-const port = "25"
-const user = "no-reply@abadiaretro.com"
-const pass = "La4n8Q#mRjdjyh!Zd*&X"
-const to = "sistemas@martianoids.com"
 
 // Contact struct
 type Contact struct {
@@ -36,16 +32,17 @@ func New() *Contact {
 }
 
 func (c *Contact) Send() {
-	c.From = user
-	c.To = to
+	c.From = cfg.SMTPUser
+	c.To = cfg.SMTPTo
 	t := template.Must(template.New("contact").Parse(Tmpl))
 	var buf bytes.Buffer
 	if err := t.Execute(&buf, c); err != nil {
 		panic(err)
 	}
 
-	auth := smtp.PlainAuth("", user, pass, host)
-	if err := smtp.SendMail(host+":"+port, auth, user, []string{c.To}, buf.Bytes()); err != nil {
+	auth := smtp.PlainAuth("", cfg.SMTPUser, cfg.SMTPPass, cfg.SMTPHost)
+	if err := smtp.SendMail(cfg.SMTPHost+":"+cfg.SMTPPort, auth, cfg.SMTPUser, []string{c.To},
+		buf.Bytes()); err != nil {
 		log.Fatalln("SMTP ERROR: ", err)
 	}
 }

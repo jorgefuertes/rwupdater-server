@@ -1,0 +1,8 @@
+# Copy to smtp_config.sh
+# and change to your smtp settings
+
+SMTPHost="my.mail.server"
+SMTPPort="25"
+SMTPUser="no-reply@domain.com"
+SMTPPass="password"
+SMTPTo="recipient_mailbox"
