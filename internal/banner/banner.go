@@ -11,7 +11,7 @@ const Title = `
 // Title - Application banner
 const Console = Title + `
 +-----------------------------------------------------+
-| RetroWiki FPGA FileServer                           |
+| RetroWiki's FPGA FileServer                         |
 | 2021 Jorge Fuertes & Ramón Martinez                 |
 +-----------------------------------------------------+
 `
