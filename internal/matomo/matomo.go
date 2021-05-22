@@ -38,7 +38,7 @@ func NewVisit(c *fiber.Ctx) {
 	v.Agent = c.Get("User-Agent")
 	v.Lang = c.Get("Accept-Language")
 
-	go v.send()
+	v.send()
 }
 
 func (v *Visit) send() {
