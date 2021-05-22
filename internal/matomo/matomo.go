@@ -1,7 +1,10 @@
 package matomo
 
 import (
+	"fmt"
+	"log"
 	"math/rand"
+	"net/http"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -35,18 +38,19 @@ func NewVisit(c *fiber.Ctx) {
 	v.Agent = c.Get("User-Agent")
 	v.Lang = c.Get("Accept-Language")
 
-	// go v.send()
+	go v.send()
 }
 
-// func (v *Visit) send() {
-// 	query := fmt.Sprintf("idsite=%v&rec=%v&action_name=%s&url=%s&_id=%s&rand=%v&apiv=%v"+
-// 		"&urlref=%s&ua=%s&lang=%s",
-// 		v.IDSite, v.Rec, v.ActionName, v.URL, v.ID, v.Rand, v.Version,
-// 		v.Ref, v.Agent, v.Lang,
-// 	)
+func (v *Visit) send() {
+	query := fmt.Sprintf("idsite=%v&rec=%v&action_name=%s&url=%s&_id=%s&rand=%v&apiv=%v"+
+		"&urlref=%s&ua=%s&lang=%s",
+		v.IDSite, v.Rec, v.ActionName, v.URL, v.ID, v.Rand, v.Version,
+		v.Ref, v.Agent, v.Lang,
+	)
 
-// 	_, err := http.Get(MURL + "?" + query)
-// 	if err != nil {
-// 		log.Println("VISIT REC ERROR:", err)
-// 	}
-// }
+	resp, err := http.Get(MURL + "?" + query)
+	if err != nil {
+		log.Println("VISIT REC ERROR:", err)
+	}
+	resp.Body.Close()
+}
